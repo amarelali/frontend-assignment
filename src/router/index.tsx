@@ -4,9 +4,10 @@ import {
   Route,
 } from "react-router-dom";
 import { App } from "../app";
-import ProtectedRoutes from "../components/ProtectedRoutes";
+import ProtectedRoutes from "../components/protectedRoutes";
+import Register from "../pages/register";
 
-const isLoggedIn = true;
+const isLoggedIn = false;
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -24,7 +25,7 @@ const router = createBrowserRouter(
         path="register"
         element={
           <ProtectedRoutes to="/" isLoggedIn={!isLoggedIn}>
-            <h1> register page </h1>
+            <Register />
           </ProtectedRoutes>
         }
       />
