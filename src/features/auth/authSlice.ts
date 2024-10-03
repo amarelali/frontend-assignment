@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../config/axios.instance';
+import Cookies from 'js-cookie';
 
 interface IUser {
     id: number,
@@ -26,6 +27,7 @@ export interface AuthState {
     user?: IUser,
     error?: IRegisterResponseError
     isLoading: boolean,
+    message?:string|undefined
 
 }
 
@@ -39,8 +41,8 @@ const initialState: AuthState = {
 export const register = createAsyncThunk("auth/register", async ({ username, email, password }: { username: string, email: string, password: string }, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
-        const data: { jwt: string, user: IUser } = await axiosInstance.post('/auth/local/register', { username, email, password });
-        console.log(data);
+        const data: {data:{ jwt: string, user: IUser }} = await axiosInstance.post('/auth/local/register', { username, email, password });
+        Cookies.set('jwt', data.data.jwt);
         return data;
     } catch (error) {
         return rejectWithValue(error);
@@ -56,8 +58,8 @@ export const authSlice = createSlice({
             state.isLoading = true;
         })
             .addCase(register.fulfilled, (state: AuthState, action) => {
-                state.jwt = action.payload.jwt;
-                state.user = action.payload.user;
+                state.jwt = action.payload.data.jwt;
+                state.user = action.payload.data.user;
                 state.isLoading = false;
 
             })

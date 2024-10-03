@@ -6,8 +6,9 @@ import {
 import { App } from "../app";
 import ProtectedRoutes from "../components/protectedRoutes";
 import Register from "../pages/register";
+import Cookies from 'js-cookie';
 
-const isLoggedIn = false;
+const isLoggedIn = Boolean(Cookies.get('jwt'));
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
