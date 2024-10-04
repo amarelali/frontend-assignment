@@ -6,9 +6,10 @@ import {
 import { App } from "../app";
 import ProtectedRoutes from "../components/protectedRoutes";
 import Register from "../pages/register";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import HomePage from "../pages/HomePage";
 
-const isLoggedIn = Boolean(Cookies.get('jwt'));
+const isLoggedIn = Boolean(Cookies.get("jwt"));
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -17,10 +18,10 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoutes to="/register" isLoggedIn={isLoggedIn}>
             <App />
+            <HomePage />
           </ProtectedRoutes>
         }
-      >
-      </Route>
+      ></Route>
 
       <Route
         path="register"
