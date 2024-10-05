@@ -1,41 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../app/store";
-import { register } from "../features/auth/authSlice";
+import { logIn, register } from "../features/auth/authSlice";
 import { useState } from "preact/hooks";
 import InputFields from "../components/InputFields";
 
 interface IProps {}
-const Register = ({}: IProps) => {
-  const { error, isLoading } = useSelector(
-    (state: RootState) => state.auth
-  );
+const LogIn = ({}: IProps) => {
+  const { error, isLoading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
-  const [username, setUserName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const [identifier, setidentifier] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   return (
     <>
-      <div id="registerForm">
-        <h1 className="mb-3">Register</h1>
-        <p>Please fill in this form to create an account.</p>
+      <div id="logInForm">
+        <h1 className="mb-3">Log In</h1>
         <hr />
         <InputFields
-          type="text"
-          placeholder="Enter UserName"
-          name="username"
-          id="username"
+          type="identifier"
+          placeholder="Enter identifier"
+          name="identifier"
+          id="identifier"
           required
-          label="Username"
-          onChange={(e: Event) => setUserName(e.target.value)}
-        />
-        <InputFields
-          type="email"
-          placeholder="Enter Email"
-          name="email"
-          id="email"
-          required
-          label="Email"
-          onChange={(e: Event) => setEmail(e.target.value)}
+          label="Identifier"
+          onChange={(e: Event) => setidentifier(e.target.value)}
         />
         <InputFields
           type="password"
@@ -46,20 +33,20 @@ const Register = ({}: IProps) => {
           label="Password"
           onChange={(e: Event) => setPassword(e.target.value)}
         />
-        <hr  className="mb-3" />
+        <hr           className="mb-3"
+         />
         {error && <h2 style={{ color: "red", fontSize: "10px" }}>{error}</h2>}
         <button
           type="submit"
           className="my-3"
           onClick={async () => {
             const val = await dispatch(
-              register({
-                username,
-                email,
+              logIn({
+                identifier,
                 password,
               })
             );
-            if(!val.hasOwnProperty('error')){
+            if (!val.hasOwnProperty("error")) {
               location.reload();
             }
           }}
@@ -92,15 +79,15 @@ const Register = ({}: IProps) => {
               ></path>
             </svg>
           )}
-          <span>Register</span>
+          <span>Log In</span>
         </button>
         <div>
           <p>
-            Already have an account? <a href="/logIn">Sign in</a>.
+            Don't have an account yet? <a href="/register">Register</a>.
           </p>
         </div>
       </div>
     </>
   );
 };
-export default Register;
+export default LogIn;

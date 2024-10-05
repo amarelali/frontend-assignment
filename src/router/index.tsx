@@ -8,6 +8,7 @@ import ProtectedRoutes from "../components/protectedRoutes";
 import Register from "../pages/register";
 import Cookies from "js-cookie";
 import HomePage from "../pages/HomePage";
+import LogIn from "../pages/LogIn";
 
 const isLoggedIn = Boolean(Cookies.get("jwt"));
 const router = createBrowserRouter(
@@ -22,12 +23,19 @@ const router = createBrowserRouter(
           </ProtectedRoutes>
         }
       ></Route>
-
       <Route
         path="register"
         element={
           <ProtectedRoutes to="/" isLoggedIn={!isLoggedIn}>
             <Register />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="logIn"
+        element={
+          <ProtectedRoutes to="/" isLoggedIn={!isLoggedIn}>
+            <LogIn />
           </ProtectedRoutes>
         }
       />

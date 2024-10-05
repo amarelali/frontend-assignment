@@ -12,7 +12,6 @@ interface IUser {
     createdAt: string,
     updatedAt: string
 }
-
 interface IRegisterResponseError {
     data: null,
     error: {
@@ -27,8 +26,7 @@ export interface AuthState {
     user?: IUser,
     error?: IRegisterResponseError
     isLoading: boolean,
-    message?:string|undefined
-
+    message?: string | undefined
 }
 
 const initialState: AuthState = {
@@ -41,14 +39,25 @@ const initialState: AuthState = {
 export const register = createAsyncThunk("auth/register", async ({ username, email, password }: { username: string, email: string, password: string }, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
     try {
-        const data: {data:{ jwt: string, user: IUser }} = await axiosInstance.post('/auth/local/register', { username, email, password });
+        const data: { data: { jwt: string, user: IUser } } = await axiosInstance.post('/auth/local/register', { username, email, password });
         Cookies.set('jwt', data.data.jwt);
-        return data;
+        console.log("user registerFunction", data.data.user);
+        return data.data;
     } catch (error) {
         return rejectWithValue(error);
     }
 })
-
+export const logIn = createAsyncThunk("/auth/local", async ({ identifier, password }: { identifier: string, password: string }, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+    try {
+        const data: { data: { jwt: string, user: IUser } } = await axiosInstance.post('/auth/local', { identifier, password });
+        Cookies.set('jwt', data.data.jwt);
+        console.log("user logIn", data.data.user);
+        return data.data;
+    } catch (error) {
+        return rejectWithValue(error);
+    }
+})
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -58,8 +67,9 @@ export const authSlice = createSlice({
             state.isLoading = true;
         })
             .addCase(register.fulfilled, (state: AuthState, action) => {
-                state.jwt = action.payload.data.jwt;
-                state.user = action.payload.data.user;
+                console.log(`action.payload ${action.payload}`);
+                state.jwt = action.payload.jwt;
+                state.user = action.payload.user;
                 state.isLoading = false;
 
             })
@@ -67,6 +77,20 @@ export const authSlice = createSlice({
                 state.error = action.payload.message;
                 state.isLoading = false;
             })
+            .addCase(logIn.pending, (state: AuthState) => {
+                state.isLoading = true;
+            })
+            .addCase(logIn.fulfilled, (state: AuthState, action) => {
+                state.jwt = action.payload.jwt;
+                state.user = action.payload.user;
+                state.isLoading = false;
+
+            })
+            .addCase(logIn.rejected, (state: AuthState, action) => {
+                state.error = action.payload.message;
+                state.isLoading = false;
+            })
+
     }
 
 })
