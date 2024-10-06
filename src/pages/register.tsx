@@ -3,7 +3,6 @@ import type { AppDispatch, RootState } from "../app/store";
 import { register } from "../features/auth/authSlice";
 import { useState } from "preact/hooks";
 import InputFields from "../components/InputFields";
-import Cookies from "js-cookie";
 
 interface IProps {}
 const Register = ({}: IProps) => {
@@ -60,7 +59,6 @@ const Register = ({}: IProps) => {
                 password,
               })
             );
-            Cookies.set("user",{...val.payload.user});
             if(!val.hasOwnProperty('error')){
               location.reload();
             }

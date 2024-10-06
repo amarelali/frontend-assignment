@@ -3,7 +3,6 @@ import type { AppDispatch, RootState } from "../app/store";
 import { logIn } from "../features/auth/authSlice";
 import { useState } from "preact/hooks";
 import InputFields from "../components/InputFields";
-import Cookies from "js-cookie";
 interface IProps {}
 const LogIn = ({}: IProps) => {
   const { error, isLoading } = useSelector((state: RootState) => state.auth);
@@ -46,7 +45,6 @@ const LogIn = ({}: IProps) => {
                 password,
               })
             );
-            Cookies.set("user",{...val.payload.user});
             if (!val.hasOwnProperty("error")) {
               location.reload();
             }

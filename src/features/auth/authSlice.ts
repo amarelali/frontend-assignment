@@ -41,7 +41,7 @@ export const register = createAsyncThunk("auth/register", async ({ username, ema
     try {
         const data: { data: { jwt: string, user: IUser } } = await axiosInstance.post('/auth/local/register', { username, email, password });
         Cookies.set('jwt', data.data.jwt);
-        console.log("user registerFunction", data.data.user);
+        Cookies.set("user", data.data.user);
         return data.data;
     } catch (error) {
         return rejectWithValue(error);
@@ -52,7 +52,7 @@ export const logIn = createAsyncThunk("/auth/local", async ({ identifier, passwo
     try {
         const data: { data: { jwt: string, user: IUser } } = await axiosInstance.post('/auth/local', { identifier, password });
         Cookies.set('jwt', data.data.jwt);
-        console.log("user logIn", data.data.user);
+        Cookies.set("user", data.data.user);
         return data.data;
     } catch (error) {
         return rejectWithValue(error);
@@ -68,7 +68,7 @@ export const authSlice = createSlice({
         })
             .addCase(register.fulfilled, (state: AuthState, action) => {
                 state.jwt = action.payload.jwt;
-                state.user = {...action.payload.user};
+                state.user = action.payload.user;
                 state.isLoading = false;
             })
             .addCase(register.rejected, (state: AuthState, action) => {
