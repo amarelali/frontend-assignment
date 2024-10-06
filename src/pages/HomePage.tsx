@@ -11,7 +11,7 @@ const HomePage = ({}: IProps) => {
     (state: RootState) => state.auth
   );
   useEffect(() => {
-    console.log("user.. ",user);
+    console.log("user.. ",user); // undefined because of reloading page
     getNotes();
   }, []);
 
